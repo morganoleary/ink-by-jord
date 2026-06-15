@@ -4,28 +4,36 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Private Tattoo Studio</title>
+
+    <title>InkbyJord | Private Tattoo Studio</title>
 
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 </head>
 
 <body>
 
     <nav>
-        <a href="/">Home</a>
-        <a href="/gallery/">Gallery</a>
-        <a href="/contact/">Contact</a>
-    </nav>
+        <div class="logo">
+            <a href="{% url 'home' %}">INKBYJORD</a>
+        </div>
 
-    <hr>
+        <div class="nav-links">
+            <a href="{% url 'home' %}">Studio</a>
+            <a href="{% url 'gallery' %}">Portfolio</a>
+            <a href="#">Enquiries</a>
+        </div>
+    </nav>
 
     {% block content %}
     {% endblock %}
 
-    <hr>
-
     <footer>
-        <p>© 2026 Tattoo Studio</p>
+        <div class="footer-content">
+            <h3>InkbyJord</h3>
+            <p>Private Tattoo Studio • Carrigtwohill, Co. Cork</p>
+            <p>Custom Designs • Graphic Realism • Saturated Realism</p>
+        </div>
     </footer>
 
 </body>
