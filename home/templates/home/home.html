@@ -81,21 +81,51 @@
 
 </section>
 
-<section class="location">
+<section class="location py-5">
+    <div class="container">
+        <div class="row align-items-center">
 
-    <h2>Studio Location</h2>
+            <!-- LEFT -->
+            <div class="col-md-6">
 
-    <p>Carrigtwohill, Co. Cork</p>
+                <h2>Visit the Studio</h2>
 
-    <iframe
-        src="YOUR_GOOGLE_MAPS_EMBED_LINK"
-        width="100%"
-        height="450"
-        style="border:0;"
-        allowfullscreen=""
-        loading="lazy">
-    </iframe>
+                <p>
+                    InkbyJord | Carrigtwohill, Co. Cork
+                </p>
 
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2461.339800252573!2d-8.263212523715172!3d51.909511281249074!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x48449dd13f4dd63d%3A0xb6c1e91f0972dd78!2sInkbyJord!5e0!3m2!1sen!2sie!4v1783375371447!5m2!1sen!2sie"
+                    class="w-100 rounded shadow-sm"
+                    height="350"
+                    style="border:0;"
+                    allowfullscreen
+                    loading="lazy">
+                </iframe>
+
+                <div class="mt-3">
+                    <a href="https://maps.google.com/?q=Carrigtwohill,+Co.+Cork,+T45+D362"
+                       target="_blank"
+                       class="btn btn-dark">
+                        Get Directions
+                    </a>
+                </div>
+
+            </div>
+
+            <!-- RIGHT -->
+            <div class="col-md-6 text-center">
+
+                <img
+                    src="{% static 'images/InkbyJordLogo.jpg' %}"
+                    class="img-fluid"
+                    style="max-width:350px;"
+                    alt="InkbyJord Logo">
+
+            </div>
+
+        </div>
+    </div>
 </section>
 
 {% endblock %}
