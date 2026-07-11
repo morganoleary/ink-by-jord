@@ -1,3 +1,141 @@
+/** MAIN **/
+:root {
+    --black: #0b0b0b;
+    --ivory: #f4f1ea;
+    --forest-green: #1c2a24;
+    --gold: #b89b5e;
+    --muted: #a8a39a;
+    --border: rgba(184, 155, 94, 0.25);
+}
+
+body {
+
+    background-color: var(--black);
+    color: var(--ivory);
+
+}
+
+.text-ivory {
+    color: var(--ivory);
+}
+
+/* MOVING BACKGROUND VIDEO */
+
+.background-video {
+
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    overflow: hidden;
+
+    z-index: -2;
+
+}
+
+
+.background-video video {
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+}
+
+.background-video::after {
+
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background: rgba(0,0,0,0.75);
+
+}
+
+/** NAVBAR **/
+.studio-nav {
+
+    background-color: var(--black);
+    padding: 25px 0;
+    border-bottom: 1px solid var(--border);
+
+}
+
+
+.studio-nav .navbar-brand {
+
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.9rem;
+    letter-spacing: 3px;
+    color: var(--ivory);
+
+}
+
+
+.studio-nav .navbar-brand:hover {
+
+    color: var(--gold);
+
+}
+
+
+.studio-nav .nav-link {
+
+    font-family: 'Manrope', sans-serif;
+    color: var(--ivory);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: .85rem;
+    transition: .3s ease;
+
+}
+
+
+.studio-nav .nav-link:hover {
+
+    color: var(--gold);
+
+}
+
+/** FOOTER **/
+.studio-footer {
+
+    background-color: var(--forest-green);
+    color: var(--ivory);
+    padding: 70px 20px;
+    margin-top: 80px;
+    text-align: center;
+    border-top: 1px solid var(--border);
+
+}
+
+
+.footer-content h3 {
+
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.4rem;
+    letter-spacing: 4px;
+    color: var(--gold);
+    margin-bottom: 20px;
+
+}
+
+
+.footer-content p {
+
+    font-family: 'Manrope', sans-serif;
+    color: var(--ivory);
+    opacity: .8;
+    letter-spacing: 1px;
+    font-size: .9rem;
+
+}
+
 /** GALLERY/PORTFOLIO PAGE **/
 
 .gallery-grid {

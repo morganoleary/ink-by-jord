@@ -16,8 +16,15 @@
 </head>
 
 <body>
+    <div class="background-video">
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <video autoplay muted loop playsinline>
+            <source src="{% static 'videos/inkbyjord-background.mp4' %}" type="video/mp4">
+        </video>
+
+    </div>
+
+    <nav class="navbar navbar-expand-lg studio-nav">
         <div class="container-fluid">
 
             <a class="navbar-brand" href="{% url 'home' %}">
@@ -44,7 +51,7 @@
     {% block content %}
     {% endblock %}
 
-    <footer class="container text-center">
+    <footer class="studio-footer">
         <div class="footer-content">
             <h3>InkbyJord</h3>
             <p>Private Tattoo Studio • Carrigtwohill, Co. Cork</p>
