@@ -1,1 +1,66 @@
-/** HOME PAGE **/
+/** GALLERY/PORTFOLIO PAGE **/
+
+.gallery-grid {
+
+    columns: 3;
+    column-gap: 20px; /* space between columns */
+
+}
+
+
+.gallery-item {
+
+    break-inside: avoid;
+    margin-bottom: 20px; /* space between images vertically */
+    overflow: hidden;
+    border-radius: 12px;
+
+}
+
+
+.gallery-img {
+
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: transform .3s ease;
+    break-inside: avoid;
+    margin-bottom: 20px;
+    overflow: hidden;
+
+}
+
+
+.gallery-img:hover {
+
+    transform: scale(1.03);
+
+}
+
+
+/* Tablet */
+
+@media (max-width: 992px) {
+
+    .gallery-grid {
+
+        columns: 2;
+
+    }
+
+}
+
+
+/* Mobile */
+
+@media (max-width: 576px) {
+
+    .gallery-grid {
+
+        columns: 1;
+
+    }
+
+}

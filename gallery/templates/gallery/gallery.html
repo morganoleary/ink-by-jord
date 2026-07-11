@@ -2,13 +2,31 @@
 
 {% block content %}
 
-<div class="gallery-grid">
+<div class="container py-5">
 
-    {% for image in images %}
-        <div class="gallery-item">
-            <img src="{{ image.image.url }}" alt="{{ image.title }}">
-        </div>
-    {% endfor %}
+    <h1 class="text-center mb-5">Gallery</h1>
+
+    <div class="gallery-grid">
+
+        {% for image in images %}
+
+            <div class="gallery-item">
+
+                <img
+                    src="{{ image.image.url }}"
+                    class="gallery-img"
+                    alt="{{ image.title }}"
+                >
+
+            </div>
+
+        {% empty %}
+
+            <p class="text-center">No images available.</p>
+
+        {% endfor %}
+
+    </div>
 
 </div>
 
