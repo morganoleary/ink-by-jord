@@ -3,16 +3,38 @@
     --black: #0b0b0b;
     --ivory: #f4f1ea;
     --forest-green: #1c2a24;
-    --gold: #b89b5e;
+    --gold: #c9a96a;
     --muted: #a8a39a;
     --border: rgba(184, 155, 94, 0.25);
+    --font-body: 'Inter', sans-serif;
+    --font-heading: 'Cormorant Garamond', serif;
 }
 
 body {
 
     background-color: var(--black);
     color: var(--ivory);
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.7;
+    letter-spacing: 0.01em;
+    font-weight: 400;
 
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: var(--font-heading);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: 0.02em;
 }
 
 .text-ivory {
@@ -175,6 +197,106 @@ body {
 
     transform: scale(1.03);
 
+}
+
+/* ENQUIRIES PAGE */
+
+.enquiry-section{
+    padding:100px 0;
+}
+
+.section-subtitle{
+    color:var(--gold);
+    text-transform:uppercase;
+    letter-spacing:3px;
+    font-size:.85rem;
+}
+
+.enquiry-card{
+    background:rgba(255,255,255,.03);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:40px;
+    backdrop-filter:blur(12px);
+}
+
+.enquiry-card label{
+    color:var(--ivory);
+    margin-bottom:.5rem;
+}
+
+.enquiry-card input,
+.enquiry-card textarea,
+.enquiry-card select{
+
+    background:#171717;
+    color:var(--ivory);
+    border:1px solid rgba(255,255,255,.1);
+
+}
+
+.enquiry-card input::placeholder,
+.enquiry-card textarea::placeholder {
+    color: var(--ivory);
+    opacity: 0.6;
+}
+
+.enquiry-card input:focus,
+.enquiry-card textarea:focus,
+.enquiry-card select:focus{
+
+    border-color:var(--gold);
+    box-shadow:none;
+    background:#171717;
+    color:white;
+
+}
+
+.enquiry-list{
+    list-style:none;
+    padding:0;
+    margin-top:2rem;
+}
+
+.enquiry-list li{
+    margin-bottom:12px;
+    opacity:.9;
+}
+
+.btn-gold {
+
+    background-color: var(--gold) !important;
+    color: var(--black) !important;
+
+    border: 1px solid var(--gold);
+    padding: 14px 30px;
+
+    font-family: var(--font-body);
+    font-weight: 600;
+
+    letter-spacing: 2px;
+    text-transform: uppercase;
+
+    border-radius: 6px;
+
+    transition: all .3s ease;
+
+}
+
+
+.btn-gold:hover {
+
+    background-color: var(--ivory);
+    color: var(--black);
+
+    border-color: var(--ivory);
+
+    transform: translateY(-2px);
+
+}
+
+#id_placement_helptext {
+    color: var(--ivory);
 }
 
 
