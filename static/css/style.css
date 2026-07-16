@@ -125,37 +125,59 @@ h6 {
 }
 
 /** FOOTER **/
+/** FOOTER **/
 .studio-footer {
-
     background-color: var(--forest-green);
     color: var(--ivory);
-    padding: 70px 20px;
-    margin-top: 80px;
-    text-align: center;
+    padding: 60px 0;
+    margin-top: 30px;
     border-top: 1px solid var(--border);
-
 }
 
-
-.footer-content h3 {
-
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 2.4rem;
+.studio-footer h3 {
+    font-family: var(--font-heading);
+    font-size: 2.3rem;
     letter-spacing: 4px;
     color: var(--gold);
-    margin-bottom: 20px;
-
+    margin-bottom: 18px;
 }
 
-
-.footer-content p {
-
-    font-family: 'Manrope', sans-serif;
+.studio-footer p,
+.studio-footer small {
+    font-family: var(--font-body);
     color: var(--ivory);
     opacity: .8;
     letter-spacing: 1px;
-    font-size: .9rem;
+}
 
+.footer-social a {
+    display: inline-flex;
+    align-items: center;
+    gap: .75rem;
+
+    padding: .8rem 1.4rem;
+
+    border: 1px solid var(--gold);
+    border-radius: 999px;
+
+    color: var(--gold);
+    text-decoration: none;
+
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+
+    transition: all .3s ease;
+}
+
+.footer-social a i {
+    font-size: 1.5rem;
+}
+
+.footer-social a:hover {
+    background: var(--gold);
+    color: var(--black);
+    transform: translateY(-2px);
 }
 
 /** GALLERY/PORTFOLIO PAGE **/
