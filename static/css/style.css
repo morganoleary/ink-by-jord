@@ -10,6 +10,24 @@
     --font-heading: 'Cormorant Garamond', serif;
 }
 
+html,
+body {
+    width: 100%;
+    max-width: 100%;
+    min-height: 100%;
+    overflow-x: hidden;
+}
+
+.page-wrapper {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
 body {
 
     background-color: var(--black);
