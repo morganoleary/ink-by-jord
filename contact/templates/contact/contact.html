@@ -62,7 +62,54 @@
 
                         {% csrf_token %}
 
-                        {{ contact_form|crispy }}
+                        {{ contact_form.name|as_crispy_field }}
+                        {{ contact_form.email|as_crispy_field }}
+                        {{ contact_form.phone|as_crispy_field }}
+                        {{ contact_form.instagram|as_crispy_field }}
+                        {{ contact_form.placement|as_crispy_field }}
+                        {{ contact_form.description|as_crispy_field }}
+
+
+                        <div class="reference-upload mt-4">
+
+                            <label class="form-label text-ivory">
+                                Reference Images
+                            </label>
+
+                            <p class="reference-help text-ivory">
+                                Upload up to 5 images. Maximum 5 MB per image.
+                            </p>
+
+                            <input
+                                type="file"
+                                name="reference_images"
+                                id="id_reference_images"
+                                accept="image/*"
+                                multiple
+                                hidden
+                            >
+
+                            <button
+                                type="button"
+                                class="btn btn-outline-light"
+                                id="add-images-btn"
+                            >
+                                + Add Reference Images
+                            </button>
+
+                            <div
+                                id="image-preview-container"
+                                class="image-preview-container mt-3"
+                            ></div>
+
+                            <div
+                                id="image-count"
+                                class="image-count text-ivory mt-2"
+                            >
+                                0 / 5 images selected
+                            </div>
+
+                        </div>
 
                         <button class="btn btn-gold w-100 mt-4" type="submit">
                             Send Enquiry
@@ -79,5 +126,130 @@
     </div>
 
 </section>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const fileInput = document.getElementById("id_reference_images");
+    const addButton = document.getElementById("add-images-btn");
+    const previewContainer = document.getElementById("image-preview-container");
+    const imageCount = document.getElementById("image-count");
+
+    const MAX_FILES = 5;
+    const MAX_FILE_SIZE = 5 * 1024 * 1024;
+
+    let selectedFiles = [];
+
+    addButton.addEventListener("click", function () {
+        fileInput.click();
+    });
+
+    fileInput.addEventListener("change", function () {
+
+        const newFiles = Array.from(fileInput.files);
+
+        for (const file of newFiles) {
+
+            if (selectedFiles.length >= MAX_FILES) {
+                alert("You can upload a maximum of 5 images.");
+                break;
+            }
+
+            if (file.size > MAX_FILE_SIZE) {
+                alert(`${file.name} is too large. Maximum file size is 5 MB.`);
+                continue;
+            }
+
+            if (!file.type.startsWith("image/")) {
+                alert(`${file.name} is not an image.`);
+                continue;
+            }
+
+            selectedFiles.push(file);
+        }
+
+        updateFileInput();
+        displayPreviews();
+
+        // Allows selecting the same file again later
+        fileInput.value = "";
+    });
+
+
+    function displayPreviews() {
+
+        previewContainer.innerHTML = "";
+
+        selectedFiles.forEach((file, index) => {
+
+            const reader = new FileReader();
+
+            reader.onload = function (event) {
+
+                const preview = document.createElement("div");
+                preview.classList.add("image-preview");
+
+                preview.innerHTML = `
+                    <img
+                        src="${event.target.result}"
+                        alt="Reference image"
+                    >
+
+                    <button
+                        type="button"
+                        class="remove-image"
+                        data-index="${index}"
+                        aria-label="Remove image"
+                    >
+                        ×
+                    </button>
+                `;
+
+                previewContainer.appendChild(preview);
+            };
+
+            reader.readAsDataURL(file);
+        });
+
+        imageCount.textContent =
+            `${selectedFiles.length} / ${MAX_FILES} images selected`;
+
+        if (selectedFiles.length >= MAX_FILES) {
+            addButton.disabled = true;
+            addButton.textContent = "Maximum 5 images selected";
+        } else {
+            addButton.disabled = false;
+            addButton.textContent = "+ Add More Images";
+        }
+    }
+
+
+    previewContainer.addEventListener("click", function (event) {
+
+        if (event.target.classList.contains("remove-image")) {
+
+            const index = event.target.dataset.index;
+
+            selectedFiles.splice(index, 1);
+
+            updateFileInput();
+            displayPreviews();
+        }
+    });
+
+
+    function updateFileInput() {
+
+        const dataTransfer = new DataTransfer();
+
+        selectedFiles.forEach(function (file) {
+            dataTransfer.items.add(file);
+        });
+
+        fileInput.files = dataTransfer.files;
+    }
+
+});
+</script>
 
 {% endblock %}

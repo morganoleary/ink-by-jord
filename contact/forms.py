@@ -1,5 +1,48 @@
 from django import forms
 
+
+class MultipleFileInput(forms.ClearableFileInput):
+    allow_multiple_selected = True
+
+
+class MultipleImageField(forms.ImageField):
+
+    MAX_FILES = 5
+    MAX_FILE_SIZE = 5 * 1024 * 1024  # 5 MB
+
+    def __init__(self, *args, **kwargs):
+        kwargs.setdefault("widget", MultipleFileInput())
+        super().__init__(*args, **kwargs)
+
+    def clean(self, data, initial=None):
+
+        if not data:
+            return []
+
+        if not isinstance(data, (list, tuple)):
+            data = [data]
+
+        if len(data) > self.MAX_FILES:
+            raise forms.ValidationError(
+                f"Please upload no more than {self.MAX_FILES} reference images."
+            )
+
+        cleaned_images = []
+
+        for image in data:
+
+            if image.size > self.MAX_FILE_SIZE:
+                raise forms.ValidationError(
+                    f"{image.name} is too large. Each image must be 5 MB or smaller."
+                )
+
+            cleaned_images.append(
+                forms.ImageField.clean(self, image, initial)
+            )
+
+        return cleaned_images
+
+
 class ContactForm(forms.Form):
 
     name = forms.CharField(
@@ -40,7 +83,8 @@ class ContactForm(forms.Form):
         )
     )
 
-    reference_image = forms.ImageField(
+    reference_images = MultipleImageField(
         required=False,
-        label="Reference Images"
+        label="Reference Images",
+        help_text="Upload up to 5 images. Maximum 5 MB per image."
     )

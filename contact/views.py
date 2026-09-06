@@ -3,6 +3,7 @@ from django.contrib import messages
 
 from .forms import ContactForm
 
+
 def contact(request):
 
     if request.method == "POST":
@@ -20,7 +21,7 @@ def contact(request):
             instagram = contact_form.cleaned_data["instagram"]
             placement = contact_form.cleaned_data["placement"]
             description = contact_form.cleaned_data["description"]
-            reference_image = contact_form.cleaned_data["reference_image"]
+            reference_images = contact_form.cleaned_data["reference_images"]
 
             print("----- NEW ENQUIRY -----")
             print("NAME:", name)
@@ -29,7 +30,11 @@ def contact(request):
             print("INSTAGRAM:", instagram)
             print("PLACEMENT & SIZE:", placement)
             print("DESCRIPTION:", description)
-            print("REFERENCE IMAGE:", reference_image)
+
+            print("REFERENCE IMAGES:")
+            for image in reference_images:
+                print(image.name)
+
             print("-----------------------")
 
             messages.success(
@@ -48,4 +53,4 @@ def contact(request):
         {
             "contact_form": contact_form
         }
-)
+    )

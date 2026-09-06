@@ -116,13 +116,11 @@ h6 {
 
 }
 
-
 .studio-nav .navbar-brand:hover {
 
     color: var(--gold);
 
 }
-
 
 .studio-nav .nav-link {
 
@@ -135,14 +133,12 @@ h6 {
 
 }
 
-
 .studio-nav .nav-link:hover {
 
     color: var(--gold);
 
 }
 
-/** FOOTER **/
 /** FOOTER **/
 .studio-footer {
     background-color: var(--forest-green);
@@ -339,6 +335,75 @@ h6 {
     color: var(--ivory);
 }
 
+/* REFERENCE IMAGE UPLOAD */
+
+.reference-help {
+    font-size: 0.9rem;
+    opacity: 0.75;
+    margin-bottom: 1rem;
+}
+
+.image-preview-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    width: 100%;
+}
+
+.image-preview {
+    position: relative;
+    width: 130px !important;
+    height: 130px !important;
+    flex: 0 0 130px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.image-preview img {
+    display: block !important;
+    width: 130px !important;
+    height: 130px !important;
+    max-width: 130px !important;
+    max-height: 130px !important;
+    object-fit: cover;
+}
+
+.remove-image {
+    position: absolute !important;
+    top: 6px !important;
+    right: 6px !important;
+
+    width: 28px !important;
+    height: 28px !important;
+    min-width: 28px;
+    min-height: 28px;
+
+    padding: 0 !important;
+    margin: 0 !important;
+
+    border: none !important;
+    border-radius: 50% !important;
+
+    background: rgba(0, 0, 0, 0.75) !important;
+    color: white !important;
+
+    font-size: 20px !important;
+    line-height: 28px !important;
+    text-align: center;
+
+    cursor: pointer;
+    z-index: 2;
+}
+
+.remove-image:hover {
+    background: rgba(0, 0, 0, 0.95) !important;
+}
+
+.image-count {
+    font-size: 0.9rem !important;
+    opacity: 0.8;
+}
 
 /* Tablet */
 
