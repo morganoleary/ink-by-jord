@@ -77,7 +77,7 @@
                             </label>
 
                             <p class="reference-help text-ivory">
-                                Upload up to 5 images. Maximum 5 MB per image.
+                                Upload up to 5 reference images.
                             </p>
 
                             <input
@@ -136,15 +136,37 @@ document.addEventListener("DOMContentLoaded", function () {
     const imageCount = document.getElementById("image-count");
 
     const MAX_FILES = 5;
-    const MAX_FILE_SIZE = 5 * 1024 * 1024;
+
+    // Images will be resized so neither dimension exceeds this.
+    const MAX_IMAGE_DIMENSION = 2000;
+
+    // JPEG compression quality.
+    const IMAGE_QUALITY = 0.82;
+
+    // Safety limit for the compressed file.
+    const MAX_COMPRESSED_SIZE = 5 * 1024 * 1024;
 
     let selectedFiles = [];
 
+
+    /*
+     * Open the file picker.
+     *
+     * Clearing the input here allows the user to select
+     * the same image again if they removed it previously.
+     */
     addButton.addEventListener("click", function () {
+
+        fileInput.value = "";
         fileInput.click();
+
     });
 
-    fileInput.addEventListener("change", function () {
+
+    /*
+     * User has selected one or more files.
+     */
+    fileInput.addEventListener("change", async function () {
 
         const newFiles = Array.from(fileInput.files);
 
@@ -155,38 +177,203 @@ document.addEventListener("DOMContentLoaded", function () {
                 break;
             }
 
-            if (file.size > MAX_FILE_SIZE) {
-                alert(`${file.name} is too large. Maximum file size is 5 MB.`);
-                continue;
-            }
-
             if (!file.type.startsWith("image/")) {
                 alert(`${file.name} is not an image.`);
                 continue;
             }
 
-            selectedFiles.push(file);
+            try {
+
+                const compressedFile = await compressImage(file);
+
+                if (compressedFile.size > MAX_COMPRESSED_SIZE) {
+                    alert(
+                        `${file.name} could not be compressed enough. ` +
+                        "Please choose a smaller image."
+                    );
+                    continue;
+                }
+
+                selectedFiles.push(compressedFile);
+
+            } catch (error) {
+
+                console.error(
+                    "Image compression failed:",
+                    file.name,
+                    error
+                );
+
+                alert(
+                    `Could not process ${file.name}. ` +
+                    "Please try another image."
+                );
+            }
         }
 
         updateFileInput();
         displayPreviews();
 
-        // Allows selecting the same file again later
-        fileInput.value = "";
     });
 
 
+    /*
+     * Resize and compress an image in the browser.
+     */
+    function compressImage(file) {
+
+        return new Promise((resolve, reject) => {
+
+            const reader = new FileReader();
+
+            reader.onload = function (event) {
+
+                const image = new Image();
+
+                image.onload = function () {
+
+                    let width = image.width;
+                    let height = image.height;
+
+                    /*
+                     * Keep the original aspect ratio.
+                     */
+                    if (width > MAX_IMAGE_DIMENSION ||
+                        height > MAX_IMAGE_DIMENSION) {
+
+                        if (width > height) {
+
+                            height =
+                                Math.round(
+                                    height *
+                                    (MAX_IMAGE_DIMENSION / width)
+                                );
+
+                            width = MAX_IMAGE_DIMENSION;
+
+                        } else {
+
+                            width =
+                                Math.round(
+                                    width *
+                                    (MAX_IMAGE_DIMENSION / height)
+                                );
+
+                            height = MAX_IMAGE_DIMENSION;
+                        }
+                    }
+
+                    const canvas = document.createElement("canvas");
+
+                    canvas.width = width;
+                    canvas.height = height;
+
+                    const context = canvas.getContext("2d");
+
+                    context.drawImage(
+                        image,
+                        0,
+                        0,
+                        width,
+                        height
+                    );
+
+                    /*
+                     * Convert to JPEG.
+                     *
+                     * JPEG keeps the email attachments relatively small
+                     * while retaining plenty of quality for tattoo references.
+                     */
+                    canvas.toBlob(
+                        function (blob) {
+
+                            if (!blob) {
+                                reject(
+                                    new Error(
+                                        "Could not create compressed image."
+                                    )
+                                );
+                                return;
+                            }
+
+                            /*
+                             * Keep the original filename,
+                             * but change the extension to .jpg.
+                             */
+                            const filename =
+                                file.name
+                                    .replace(/\.[^/.]+$/, "") +
+                                ".jpg";
+
+                            const compressedFile =
+                                new File(
+                                    [blob],
+                                    filename,
+                                    {
+                                        type: "image/jpeg",
+                                        lastModified: Date.now()
+                                    }
+                                );
+
+                            resolve(compressedFile);
+
+                        },
+                        "image/jpeg",
+                        IMAGE_QUALITY
+                    );
+                };
+
+                image.onerror = function () {
+                    reject(
+                        new Error("Could not read image.")
+                    );
+                };
+
+                image.src = event.target.result;
+            };
+
+            reader.onerror = function () {
+                reject(
+                    new Error("Could not read file.")
+                );
+            };
+
+            reader.readAsDataURL(file);
+        });
+    }
+
+
+    /*
+     * Put the compressed files back into the actual
+     * file input so they are submitted to Django.
+     */
+    function updateFileInput() {
+
+        const dataTransfer = new DataTransfer();
+
+        selectedFiles.forEach(function (file) {
+            dataTransfer.items.add(file);
+        });
+
+        fileInput.files = dataTransfer.files;
+    }
+
+
+    /*
+     * Display previews.
+     */
     function displayPreviews() {
 
         previewContainer.innerHTML = "";
 
-        selectedFiles.forEach((file, index) => {
+        selectedFiles.forEach(function (file, index) {
 
             const reader = new FileReader();
 
             reader.onload = function (event) {
 
                 const preview = document.createElement("div");
+
                 preview.classList.add("image-preview");
 
                 preview.innerHTML = `
@@ -211,43 +398,53 @@ document.addEventListener("DOMContentLoaded", function () {
             reader.readAsDataURL(file);
         });
 
+
         imageCount.textContent =
             `${selectedFiles.length} / ${MAX_FILES} images selected`;
 
+
         if (selectedFiles.length >= MAX_FILES) {
+
             addButton.disabled = true;
-            addButton.textContent = "Maximum 5 images selected";
+
+            addButton.textContent =
+                "Maximum 5 images selected";
+
         } else {
+
             addButton.disabled = false;
-            addButton.textContent = "+ Add More Images";
+
+            addButton.textContent =
+                "+ Add More Images";
         }
     }
 
 
-    previewContainer.addEventListener("click", function (event) {
+    /*
+     * Remove an image.
+     */
+    previewContainer.addEventListener(
+        "click",
+        function (event) {
 
-        if (event.target.classList.contains("remove-image")) {
+            if (
+                event.target.classList.contains(
+                    "remove-image"
+                )
+            ) {
 
-            const index = event.target.dataset.index;
+                const index =
+                    Number(
+                        event.target.dataset.index
+                    );
 
-            selectedFiles.splice(index, 1);
+                selectedFiles.splice(index, 1);
 
-            updateFileInput();
-            displayPreviews();
+                updateFileInput();
+                displayPreviews();
+            }
         }
-    });
-
-
-    function updateFileInput() {
-
-        const dataTransfer = new DataTransfer();
-
-        selectedFiles.forEach(function (file) {
-            dataTransfer.items.add(file);
-        });
-
-        fileInput.files = dataTransfer.files;
-    }
+    );
 
 });
 </script>

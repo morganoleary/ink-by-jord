@@ -8,10 +8,18 @@ class MultipleFileInput(forms.ClearableFileInput):
 class MultipleImageField(forms.ImageField):
 
     MAX_FILES = 5
-    MAX_FILE_SIZE = 5 * 1024 * 1024  # 5 MB
+    MAX_FILE_SIZE = 5 * 1024 * 1024  # 5 MB safety limit
 
     def __init__(self, *args, **kwargs):
-        kwargs.setdefault("widget", MultipleFileInput())
+        kwargs.setdefault(
+            "widget",
+            MultipleFileInput(
+                attrs={
+                    "accept": "image/*",
+                    "multiple": True,
+                }
+            )
+        )
         super().__init__(*args, **kwargs)
 
     def clean(self, data, initial=None):
@@ -33,12 +41,17 @@ class MultipleImageField(forms.ImageField):
 
             if image.size > self.MAX_FILE_SIZE:
                 raise forms.ValidationError(
-                    f"{image.name} is too large. Each image must be 5 MB or smaller."
+                    f"{image.name} is too large. "
+                    "Each image must be 5 MB or smaller."
                 )
 
-            cleaned_images.append(
-                forms.ImageField.clean(self, image, initial)
+            cleaned_image = forms.ImageField.clean(
+                self,
+                image,
+                initial
             )
+
+            cleaned_images.append(cleaned_image)
 
         return cleaned_images
 
@@ -78,7 +91,10 @@ class ContactForm(forms.Form):
         widget=forms.Textarea(
             attrs={
                 "rows": 6,
-                "placeholder": "Describe your tattoo idea, style preferences, and any important details..."
+                "placeholder": (
+                    "Describe your tattoo idea, style preferences, "
+                    "and any important details..."
+                )
             }
         )
     )
@@ -86,5 +102,7 @@ class ContactForm(forms.Form):
     reference_images = MultipleImageField(
         required=False,
         label="Reference Images",
-        help_text="Upload up to 5 images. Maximum 5 MB per image."
+        help_text=(
+            "Upload up to 5 images. "
+        )
     )

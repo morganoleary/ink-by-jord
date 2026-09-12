@@ -21,7 +21,10 @@ def contact(request):
             instagram = contact_form.cleaned_data["instagram"]
             placement = contact_form.cleaned_data["placement"]
             description = contact_form.cleaned_data["description"]
-            reference_images = contact_form.cleaned_data["reference_images"]
+
+            reference_images = request.FILES.getlist(
+                "reference_images"
+            )
 
             print("----- NEW ENQUIRY -----")
             print("NAME:", name)
@@ -32,8 +35,14 @@ def contact(request):
             print("DESCRIPTION:", description)
 
             print("REFERENCE IMAGES:")
+
             for image in reference_images:
-                print(image.name)
+                print(
+                    image.name,
+                    "-",
+                    round(image.size / 1024, 1),
+                    "KB"
+                )
 
             print("-----------------------")
 
