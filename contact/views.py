@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.conf import settings
+from django.core.mail import EmailMessage
 
 from .forms import ContactForm
 
@@ -26,25 +28,35 @@ def contact(request):
                 "reference_images"
             )
 
-            print("----- NEW ENQUIRY -----")
-            print("NAME:", name)
-            print("EMAIL:", email)
-            print("PHONE:", phone)
-            print("INSTAGRAM:", instagram)
-            print("PLACEMENT & SIZE:", placement)
-            print("DESCRIPTION:", description)
+            email_body = f"""
+New tattoo enquiry
 
-            print("REFERENCE IMAGES:")
+Name: {name}
+Email: {email}
+Phone: {phone}
+Instagram: {instagram}
+Placement & Size: {placement}
+
+Description:
+{description}
+"""
+
+            enquiry_email = EmailMessage(
+                subject=f"New Tattoo Enquiry from {name}",
+                body=email_body,
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                to=[settings.DEFAULT_FROM_EMAIL],
+                reply_to=[email],
+            )
 
             for image in reference_images:
-                print(
+                enquiry_email.attach(
                     image.name,
-                    "-",
-                    round(image.size / 1024, 1),
-                    "KB"
+                    image.read(),
+                    image.content_type,
                 )
 
-            print("-----------------------")
+            enquiry_email.send()
 
             messages.success(
                 request,
